@@ -5,7 +5,7 @@ LABEL maintainer="The Paperless Project https://github.com/the-paperless-project
         Sven Fischer <git-dev@linux4tw.de>"
 
 # Copy Pipfiles file, init script and gunicorn.conf
-COPY Pipfile* /usr/src/paperless/
+COPY ./Pipfile /usr/src/paperless/
 COPY scripts/docker-entrypoint.sh /sbin/docker-entrypoint.sh
 COPY scripts/gunicorn.conf /usr/src/paperless/
 
