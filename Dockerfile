@@ -5,7 +5,7 @@ LABEL maintainer="The Paperless Project https://github.com/the-paperless-project
         Sven Fischer <git-dev@linux4tw.de>"
 
 # Copy Pipfiles file, init script and gunicorn.conf
-COPY ./Pipfile /usr/src/paperless/
+COPY Pipfile* /usr/src/paperless/
 COPY scripts/docker-entrypoint.sh /sbin/docker-entrypoint.sh
 COPY scripts/gunicorn.conf /usr/src/paperless/
 
@@ -28,8 +28,8 @@ RUN apk add --no-cache \
       sudo \
       tesseract-ocr \
 			tzdata \
-      unpaper
-RUN apk add --no-cache --virtual .build-dependencies \
+      unpaper && \
+    apk add --no-cache --virtual .build-dependencies \
       g++ \
       gcc \
       jpeg-dev \
@@ -37,15 +37,15 @@ RUN apk add --no-cache --virtual .build-dependencies \
       poppler-dev \
       postgresql-dev \
       python3-dev \
-      zlib-dev
+      zlib-dev && \
 # Install python dependencies
-RUN python3 -m ensurepip && \
+    python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     cd /usr/src/paperless && \
     pip3 install --upgrade pip pipenv && \
-    pipenv install --system --deploy
+    pipenv install --system --deploy && \
 # Remove build dependencies
-RUN apk del .build-dependencies && \
+    apk del .build-dependencies && \
 # Create the consumption directory
     mkdir -p $PAPERLESS_CONSUMPTION_DIR && \
 # Create user
